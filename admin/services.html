@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Links -->
+
+    <link rel="stylesheet" href="../assets/lib/fontawesome-v6.4.2/css/all.css">
+    <link rel="stylesheet" href="../assets/lib/bootstrap.min.css">
+
+    <!-- #region style -->
+
+<style>
+    .modal-dialog{
+        max-width: 50rem;
+        margin: 6% auto;
+    }
+    .modal-center {
+        top: 30% !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .modal-Img {
+        width: 16vw;
+        height: 30vh;
+        display: block;
+        font-size: 25px;
+        border-radius: 0.5rem;
+        border: 1px solid teal;
+        display: flex;
+        text-align: center;
+    }
+
+    .non-resizable {
+        resize: none;
+        overflow-y: auto;
+    }
+
+    .action-icon {
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+    }
+
+    table tr th:first-of-type {
+        width: 12%;
+    }
+
+    table tr th:last-of-type {
+        width: 20%;
+    }
+
+    table input[type="checkbox"] {
+        cursor: pointer;
+    }
+
+    .input-searsh {
+        position: relative;
+        display: inline-block;
+        width: 35%;
+    }
+
+    .searsh-icon {
+        position: absolute;
+        right: 2%;
+        font-size: 18px;
+        top: 26%;
+        color: lightgray;
+    }
+
+    .btn-dropdown-custom {
+        width: 100%;
+        border-radius: 0px;
+    }
+
+    .plus-icon {
+        font-size: 15px;
+        margin-right: 10px;
+    }
+
+    .position-custom {
+        position: absolute;
+        right: 1%;
+        top: 2%;
+    }
+</style>
+    <!-- #endregion -->
+
+    <title>MINI BLog</title>
+</head>
+
+<body>
+    <!-- #region HTML-->
+    <div class="container my-5 position-relative">
+
+
+        <!--#region Add Modal -->
+
+        <div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create New</h5>
+                        <button type="button" class="close btn-close-modal" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row m-0 p-0">    
+                            <div class="col-8">
+                                <form id="add-form" enctype="multipart/form-data">
+                                    <input id="a-name" type="text" class="form-control mb-3" name="name" placeholder="Name" aria-label="title" aria-describedby="basic-addon1">
+                                    <input id="a-price" type="text" class="form-control mb-3" name="price" placeholder="Price" aria-label="title" aria-describedby="basic-addon1">
+                                    <select id="a-category" class="form-select form-select-sm mb-3" name="category" aria-label=".form-select-sm example">
+                                        <option selected="">Category</option>
+                                    </select>
+                                    <select id="a-supplier" class="form-select form-select-sm mb-3" name="supplier" aria-label=".form-select-sm example">
+                                        <option selected="">Supplier</option>
+                                    </select>
+                                    <textarea id="a-description" type="text" name="description" class="form-control mb-3 non-resizable" rows="5" cols="50" placeholder="Description" aria-label="title" aria-describedby="basic-addon1"></textarea>
+                                    <input onchange="loadFile('a-img-load',event)"   type="file" name="upload" class="form-control form-control-sm mb-3" aria-label="Small file input example">
+                                </form>
+                            </div>  
+                            <div class="col-4">
+                                <img id="a-img-load" class="modal-Img" alt="Post Image">
+                            </div>                  
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-close-modal"> Close</button>
+                        <button id="btn-add" type="button" class="btn btn-success">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--#endregion Add Modal -->
+
+        <!--#region Details Modal -->
+
+        <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                        <button type="button" class="close btn-close-modal" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row m-0 p-0">    
+                            <div class="col-8">
+                                <form id="detaiels-form" enctype="multipart/form-data">
+                                    <input id="d-name" type="text" class="form-control mb-3" name="name" aria-label="name" aria-describedby="basic-addon1">
+                                    <input id="d-price" type="text" class="form-control mb-3" name="price" placeholder="Price" aria-label="title" aria-describedby="basic-addon1">
+                                    <input id="d-category" type="text" class="form-control mb-3" name="category" aria-label="category" aria-describedby="basic-addon1">
+                                    <input id="d-supplier" type="text" class="form-control mb-3" name="supplier" aria-label="supplier" aria-describedby="basic-addon1">
+                                    <textarea id="d-description" type="text" name="description" class="form-control mb-3 non-resizable" rows="5" cols="50" placeholder="conetnt" aria-label="title" aria-describedby="basic-addon1"></textarea>
+                                </form>
+                            </div>  
+                            <div class="col-4">
+                                <img id="d-img-load" class="modal-Img" alt="Post Image">
+                            </div>                  
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-close-modal"> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--#endregion Details Modal -->
+
+        <!--#region Edit Modal -->
+
+        <div class="modal fade" id="e-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit register</h5>
+                        <button type="button" class="close btn-close-modal" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row m-0 p-0">    
+                            <div class="col-8">
+                                <form id="edit-form" enctype="multipart/form-data">
+                                    <input id="e-name" type="text" class="form-control mb-3" name="name" aria-label="name" aria-describedby="basic-addon1">
+                                    <input id="e-price" type="text" class="form-control mb-3" name="price" placeholder="Price" aria-label="title" aria-describedby="basic-addon1">
+                                    <select id="e-category" class="form-select form-select-sm mb-3" name="category" aria-label=".form-select-sm example">
+                                    </select>
+                                    <select id="e-supplier" class="form-select form-select-sm mb-3" name="supplier" aria-label=".form-select-sm example">
+                                    </select>
+                                    <textarea id="e-description" type="text" name="description" class="form-control mb-3 non-resizable" rows="5" cols="50"  aria-label="description" aria-describedby="basic-addon1"></textarea>
+                                    <input onchange="loadFile('e-img-load',event)"   type="file" name="upload" class="form-control form-control-sm mb-3" aria-label="Small file input example">
+                                </form>
+                            </div>  
+                            <div class="col-4">
+                                <img id="e-img-load" class="modal-Img" alt="Post Image">
+                            </div>                  
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-close-modal"> Close</button>
+                        <button id="btn-edit" type="button" class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--#endregion Edit Modal -->
+
+        <!--#region Delete Modal -->
+        <div class="modal fade" id="d-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete !!</h5>
+                        <button type="button" class="close btn-close-modal" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you shure about that you i,ll delete this registered
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-close-modal"> Close</button>
+                        <button id="btn-delete" type="button" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--#endregion Delete Modal -->
+
+        <div class="input-searsh mt-3 mb-3">
+            <input class="form-control" type="text" id="searsh-input" onkeyup="Searsh()"
+                placeholder="Inser name to searsh ....">
+            <i class="fa-solid fa-magnifying-glass searsh-icon"></i>
+        </div>
+        <div class="dropdown position-custom">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Actions
+            </button>
+            <ul class="dropdown-menu">
+                <li><button onclick="addregister()" class="btn btn-success btn-dropdown-custom"><i
+                            class="fa fas fa-plus plus-icon"></i>Add New</button></li>
+                <li><button onclick="DeleteSelected()" class="btn btn-danger btn-dropdown-custom">Delete
+                        Selected</button></li>
+                <li class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <table class="table table-responsive table-bordered table-striped mt-3 mb-3 text-center">
+            <tr>
+                <th>
+                    <label class="form-label"><input onchange="selectAll()" style="margin-right: 5px;"
+                            class="form-check-input" type="checkbox"> Select All</label>
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Supplier
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+        </table>
+    </div>
+    <!-- #endregion -->
+
+    <!-- Scripts -->
+    <script src="../assets/lib/sweetalert/sweetalert.min.js"></script>
+    <script src="../assets/lib/jquery-3.7.1.min.js"></script>
+    <script src="../assets/lib/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        var servId;
+
+        //#region Searsh 
+
+        function Searsh() {
+            let input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searsh-input");
+            filter = input.value.toUpperCase();
+            table = document.getElementsByTagname('table')[0];
+            tr = table.querySelectorAll('table tr:not(:first-of-type)');
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagname("td")[1];
+                if (td) {
+                    txtValue = td.textcontent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+                td = tr[i].getElementsByTagname("td")[2];
+                if (td) {
+                    txtValue = td.textcontent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                }
+            }
+        }
+
+        //#endregion Searsh 
+      
+        //#region AddConfirm
+
+        function addregister(){
+
+            const Closebuttons = document.querySelectorAll('.btn-close-modal');
+            Closebuttons.forEach(function (btnClose) {
+                btnClose.addEventListener('click', function (){
+                    $('form')[0].reset();
+                    $('img')[0].src="";
+                    $('#a-category').html(`<option selected="">Category</option>`);
+                    $('#a-supplier').html(`<option selected="">Supplier</option>`);
+                    $('#add-modal').modal('hide');
+                });
+            });
+
+            fetch('handel.php/categories', {
+                method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+                .then(data => { data
+                    data.forEach(category => {
+                        $('#a-category').eq(0).append(`
+                            <option value="${category.id}">${category.name}</option>
+                         `)
+                    });
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+
+            fetch('handel.php/suppliers', {
+            method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+                .then(data => { data
+                    data.forEach(supplier => {
+                        $('#a-supplier').eq(0).append(`
+                            <option value="${supplier.id}">${supplier.name}</option>
+                         `)
+                    });
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+
+
+            $('#add-modal').modal('show');  
+        }
+
+        //#endregion 
+
+        //#region Refresh
+        
+        function refresh(){
+            fetch('handel.php/services', {
+                method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+                .then(data => { data
+                    $('tr:has(td)').remove();
+                    data.forEach(service =>{
+                        $('tbody').eq(0).append(`
+                            <tr>
+                                <td><input class="form-check-input"  type="checkbox"></td>
+                                <td>${service.name}</td>
+                                <td>${service.price}</th>
+                                <td>${service.supplier}</th>
+                                <td>
+                                    <button onclick="editConfirm(this)" class="btn btn-info"><i class="fa-regular fa-pen-to-square action-icon"></i></button>
+                                    <button onclick="showDetails(this)" class="btn btn-primary"><i class="fa-solid fa-file-contract action-icon"></i></button>
+                                    <button onclick="deleteConfirm(this)" class="btn btn-danger"><i class="fa-solid fa-trash-can action-icon"></i></button>
+                                </td>
+                                <input type="hidden" value="${service.id}">
+                            </tr>
+                         `)
+                    });
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+        }
+
+        //#endregion 
+
+        //#region LoadFile
+
+        var loadFile = function (str, event) {
+        var image = $('#' + str);
+        image.attr('src', URL.createObjectURL(event.target.files[0]));
+        };
+        
+        //#endregion 
+        
+        //#region Details
+
+        function showDetails(button) {
+            const Closebuttons = document.querySelectorAll('.btn-close-modal');
+            Closebuttons.forEach(function (btnClose) {
+                btnClose.addEventListener('click', function () {
+                    $('#details-modal').modal('hide');
+                });
+            });
+
+            fetch('handel.php/categories', {
+            method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => { data
+                data.forEach(category => {
+                    $('#d-category').eq(0).val(category.name);
+                });
+            })
+            .catch(error => {
+                console.error('Error during fetch operation:', error);
+            });
+
+            fetch('handel.php/suppliers', {
+            method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => { data
+                data.forEach(category => {
+                    $('#d-supplier').eq(0).val(category.name);
+                });
+            })
+            .catch(error => {
+                console.error('Error during fetch operation:', error);
+            });
+
+            let row = button.parentNode.parentNode;
+            const servId = parseInt(row.querySelectorAll('input[type="hidden"]')[0].value);
+            fetch('handel.php/services/?id='+servId, {
+                method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => { data
+                data.forEach(service =>{
+                    $('#d-name').val(service.name);
+                    $('#d-price').val(service.price);
+                    $('#d-description').val(service.description);
+                    $('#d-img-load').attr('src', '../assets/upload/' + service.imgUrl);
+                });
+            })
+            .catch(error => {
+                console.error('Error during fetch operation:', error);
+            });
+
+            $('#details-modal').modal('show');         
+        }
+
+        //#endregion Details
+
+        //#region Editconfirm
+
+        function editConfirm(button) {      
+            const Closebuttons = document.querySelectorAll('.btn-close-modal');
+            Closebuttons.forEach(function (btnClose) {
+                btnClose.addEventListener('click', function(){
+                    $('form')[0].reset();
+                    $('img')[0].src="";
+                    $('#e-category').html("");
+                    $('#e-supplier').html("");
+                    $('#e-modal').modal('hide');
+                });
+            });
+
+            fetch('handel.php/categories', {
+            method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => { data
+                data.forEach(category => {
+                    $('#e-category').eq(0).append(`
+                        <option value="${category.id}">${category.name}</option>
+                        `)
+                });
+            })
+            .catch(error => {
+                console.error('Error during fetch operation:', error);
+            });
+
+            fetch('handel.php/suppliers', {
+            method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => { data
+                data.forEach(supplier => {
+                    $('#e-supplier').eq(0).append(`
+                        <option value="${supplier.id}">${supplier.name}</option>
+                        `)
+                });
+            })
+            .catch(error => {
+                console.error('Error during fetch operation:', error);
+            });
+
+            let row = button.parentNode.parentNode;
+            servId = parseInt(row.querySelectorAll('input[type="hidden"]')[0].value);
+            fetch('handel.php/services/?id='+servId, {
+                method: 'GET',
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => { data
+                data.forEach(service =>{
+                    $('#e-name').val(service.name);
+                    $('#e-price').val(service.price);
+                    $('#e-category').val(service.categoryId);
+                    $('#e-supplier').val(service.supplierId);
+                    $('#e-description').val(service.description);
+                    $('#e-img-load').attr('src', '../assets/upload/' + service.imgUrl);
+                });
+            })
+            .catch(error => {
+                console.error('Error during fetch operation:', error);
+            });
+
+            $('#e-modal').modal('show');     
+        }
+
+
+        //#endregion Edit
+
+        //#region Delete
+
+        //#region Delete one register
+
+        function deleteConfirm(button) {
+            $('#d-modal').modal('show');
+            const Closebuttons = document.querySelectorAll('.btn-close-modal');
+            let row = button.parentNode.parentNode;
+            servId = parseInt(row.querySelectorAll('input[type="hidden"]')[0].value);
+            Closebuttons.forEach(function (btnClose) {
+                btnClose.addEventListener('click', function () {
+                    $('#d-modal').modal('hide');
+                });
+            });
+        }
+
+        //#endregion 
+
+        //#region Delete Multi register
+
+        function DeleteSelected() {
+            $('#d-modal').modal('show');
+            const btnDelete = document.getElementById('btn-delete');
+            const Closebuttons = document.querySelectorAll('.btn-close-modal');
+
+            Closebuttons.forEach(function (btnClose) {
+                btnClose.addEventListener('click', function () {
+                    $('#d-modal').modal('hide');
+                });
+            });
+        }
+
+        //#endregion Delete Multi register
+
+        //#endregion Delete 
+
+        //#region selectAll
+        
+        function selectAll() {
+                let selectAllCheckbox = document.querySelector('table tr:first-of-type th:first-of-type input[type="checkbox"]');
+                if (selectAllCheckbox.checked == true) {
+                    let checkboxes = document.querySelectorAll('table tr td input[type="checkbox"]');
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.checked = true;
+                    });
+                }
+                else {
+                    let checkboxes = document.querySelectorAll('table tr td input[type="checkbox"]');
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.checked = false;
+                    });
+                }
+            }
+        //#endregion selectAll
+        
+        $(document).ready(function(){
+            refresh();
+
+            //#region Add
+            const btnAdd = document.getElementById('btn-add');
+
+            btnAdd.addEventListener('click', function (){
+                var formData = new FormData(document.getElementById('add-form'));
+                fetch('handel.php/services', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+                .then(data => { data
+                    if(data){
+                        $('form')[0].reset();
+                        $('img')[0].src="";
+                        $('#a-category').html(`<option selected="">Category</option>`);
+                        $('#a-supplier').html(`<option selected="">Supplier</option>`);
+                        $('#add-modal').modal('hide');
+                        refresh();
+                        swal({
+                            //  title: title,
+                            text: "Add successfully",
+                            content: true,
+                            icon: "success",
+                            classname: 'swal-IW',
+                            timer: 1700,
+                            buttons: false,
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+            })
+            //#endregion
+
+            //#region Edit
+            const btnEdit = document.getElementById('btn-edit');
+            btnEdit.addEventListener('click', function () {
+                var formData = new FormData(document.getElementById('edit-form'));
+                fetch('handel.php/services/?id='+servId,  {
+                method: 'POST',
+                body: formData,
+                })
+                .then(response => {  
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+                })
+                .then(data => { data
+                    if(data){
+                        refresh();
+                        $('form')[0].reset();
+                        $('img')[0].src="";
+                        $('#e-category').html("");
+                        $('#e-supplier').html("");
+                        $('#e-modal').modal('hide');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+            })
+            //#endregion
+             
+            //#region Delete
+            const btnDelete = document.getElementById('btn-delete');
+            btnDelete.addEventListener('click', function () {
+                fetch('handel.php/services/?id=' + servId, {
+                    method: 'DELETE',
+                })
+                .then(response => {  
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => { data
+                        if(data){
+                            refresh();
+                            $('#d-modal').modal('hide');
+                            swal({
+                            //  title: title,
+                            text: "Delete successfully",
+                            content: true,
+                            icon: "success",
+                            classname: 'swal-IW',
+                            timer: 1700,
+                            buttons: false,
+                        });
+                        }
+                })
+                .catch(error => {
+                    console.error('Error during fetch operation:', error);
+                });
+            })
+            //#endregion
+        });
+    </script>
+</body>
+</html>

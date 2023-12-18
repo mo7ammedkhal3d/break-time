@@ -1,0 +1,12 @@
+{
+    "app_Name": "breaktime",
+    "database": [
+        {
+            "host": "localhost",
+            "user": "root",
+            "password": "",
+            "database": "breaktime"
+        }
+    ],
+    "maintenanceMode": false
+}
