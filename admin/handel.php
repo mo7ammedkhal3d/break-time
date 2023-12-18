@@ -1,6 +1,6 @@
 <?php
 
-    define("ROOT_PATH","/PHP/BreakTime/admin/handel.php");
+    define("ROOT_PATH","/My-Github/break-time/admin/handel.php");
 
     $requstURI = str_replace(ROOT_PATH,"", $_SERVER['REQUEST_URI']);
     
@@ -156,6 +156,85 @@
         echo json_encode($rows);
     }
 
+     // Get One
+
+     if(str_contains($requstURI,'/categories/?id') && $_SERVER['REQUEST_METHOD'] === "GET"){
+        $catId = $_GET['id'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $result = $conn->query("Select * from category where id = $catId");
+        $author = 
+        $conn->close();
+        $rows = [];
+    
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    
+        header('Content-Type: application/json');
+    
+        echo json_encode($rows);
+
+
+    }
+
+    // Add
+    if($requstURI == "/categories" && $_SERVER['REQUEST_METHOD']=== "POST"){
+        $name = $_POST['name'];
+
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $stmt = $conn->prepare("INSERT INTO category (name ) VALUES (?)");
+        $stmt->bind_param("s", $name);
+        $result=$stmt->execute();
+        $stmt->close();
+        $conn->close();
+        echo json_encode($result);
+    }
+
+    // Edit
+    if(str_contains($requstURI,'/categories/?id')  && $_SERVER['REQUEST_METHOD'] === "POST"){
+        $catId = $_GET['id'];
+        $name = $_POST['name'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        } 
+
+        $stmt = $conn->prepare("UPDATE category SET name = ? WHERE id = ?");
+        $stmt->bind_param("si", $name, $catId);
+        $result = $stmt->execute();
+        $stmt->close();
+        echo json_encode($result);  
+    }
+
+    // Delete
+
+    if(str_contains($requstURI,'/categories/?id') && $_SERVER['REQUEST_METHOD'] ==="DELETE"){
+        $servId = $_GET['id'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $result = $conn->query("DELETE from category where id=$servId");
+        $conn->close();
+    
+        header('Content-Type: application/json');
+    
+        echo json_encode($result);
+    }    
+
     // Suppliers
 
     // Get All
@@ -166,7 +245,7 @@
             die('connection failed .. !! '.$th->getMessage());
         }
     
-        $result = $conn->query('SELECT id, name FROM supplier');
+        $result = $conn->query('SELECT id, name, phone, address FROM supplier');
         $conn->close();
         $rows = [];
     
@@ -178,4 +257,87 @@
     
         echo json_encode($rows);
     }
+
+    // Get One
+
+    if(str_contains($requstURI,'/suppliers/?id') && $_SERVER['REQUEST_METHOD'] === "GET"){
+        $supId = $_GET['id'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $result = $conn->query("Select * from supplier where id = $supId");
+        $author = 
+        $conn->close();
+        $rows = [];
+    
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+    
+        header('Content-Type: application/json');
+    
+        echo json_encode($rows);
+
+
+    }
+
+    // Add
+    if($requstURI == "/suppliers" && $_SERVER['REQUEST_METHOD']=== "POST"){
+        $name = $_POST['name'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $stmt = $conn->prepare("INSERT INTO supplier (name , phone , address) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $name , $phone , $address);
+        $result=$stmt->execute();
+        $stmt->close();
+        $conn->close();
+        echo json_encode($result);
+    }
+
+    // Edit
+    if(str_contains($requstURI,'/suppliers/?id')  && $_SERVER['REQUEST_METHOD'] === "POST"){
+        $supId = $_GET['id'];
+        $name = $_POST['name'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $stmt = $conn->prepare("UPDATE supplier SET name = ? , phone = ?  , address = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $name, $phone,$address, $supId);
+        $result = $stmt->execute();
+        $stmt->close();
+        echo json_encode($result);
+         
+    }
+
+    // Delete
+
+    if(str_contains($requstURI,'/suppliers/?id') && $_SERVER['REQUEST_METHOD'] ==="DELETE"){
+        $supId = $_GET['id'];
+        try {
+            $conn = new  mysqli('localhost','root','','breaktime','3306');
+        } catch (\Throwable $th) {
+            die('connection failed .. !! '.$th->getMessage());
+        }
+
+        $result = $conn->query("DELETE from supplier where id=$supId");
+        $conn->close();
+    
+        header('Content-Type: application/json');
+    
+        echo json_encode($result);
+    }    
 ?>
