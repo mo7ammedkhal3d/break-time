@@ -38,7 +38,6 @@
         }
 
         $result = $conn->query("Select * from services where id = $servId");
-        $author = 
         $conn->close();
         $rows = [];
     
@@ -96,6 +95,10 @@
             die('connection failed .. !! '.$th->getMessage());
         }
         if(!empty($_FILES['upload']['name'])){
+            $result = $conn->query("Select imgUrl from services where id = $servId");
+            $service = mysqli_fetch_assoc($result);
+            if (file_exists($uploadDir.$service['imgUrl'])) 
+                unlink($uploadDir.$service['imgUrl']);
             $fileName = basename($_FILES['upload']['name']);
             $uploadFile = $uploadDir . basename($_FILES['upload']['name']);
             move_uploaded_file($_FILES['upload']['tmp_name'], $uploadFile);
@@ -123,6 +126,11 @@
         } catch (\Throwable $th) {
             die('connection failed .. !! '.$th->getMessage());
         }
+        $uploadDir = '../assets/upload/';
+        $result = $conn->query("Select imgUrl from services where id = $servId");
+        $service = mysqli_fetch_assoc($result);
+        if (file_exists($uploadDir.$service['imgUrl'])) 
+            unlink($uploadDir.$service['imgUrl']);
 
         $result = $conn->query("DELETE from services where id=$servId");
         $conn->close();

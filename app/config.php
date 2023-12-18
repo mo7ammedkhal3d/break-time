@@ -1,13 +1,13 @@
 <?php
 
-    $config = json_decode(file_get_contents('app.json'), true);
+    $maintenanceMode = json_decode(file_get_contents('assets/app.json'), true)['maintenanceMode'];
 
-    define("ROOT_PATH","/PHP/breaktime/");
+    define("ROOT_PATH","/My-Github/breaktime/");
 
     $requstURI = str_replace(ROOT_PATH,"", $_SERVER['REQUEST_URI']);
 
-    if($config['maintenanceMode'] === true){
-        header("Location: maintan.html");
+    if($maintenanceMode === true){
+        header("Location: pages/maintan.html");
     }   
 
     if($requstURI=='/'){

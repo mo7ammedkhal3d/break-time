@@ -1,9 +1,9 @@
 <?php
 
-    require_once 'config.php';
+    $database = json_decode(file_get_contents('../assets/app.json'), true)['database'];
 
     try {
-        $conn = new mysqli($config['database'][0]['host'], $config['database'][0]['user'], $config['database'][0]['password'],$config['database'][0]['database']);
+        $conn = new mysqli($database[0]['host'], $database[0]['user'], $database[0]['password'],$database[0]['database']);
     } catch (\Throwable $th) {
         die('connection failed .. !! '.$th->getMessage());
     }
@@ -16,13 +16,11 @@
         $services[] = $row;
     }
 ?>
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/lib/bootstrap.min.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="../assets/lib/bootstrap.min.css">
+    <title>Services</title>
 </head>
     <style>
 
@@ -51,7 +49,7 @@
    <?php foreach($services as $service){ ?>
         <div class="col">
             <div class=card>
-            <img style="width:100%;height:15vw" src="./assets/upload/<?php echo $service['imgUrl']?>" alt="Loading">
+            <img style="width:100%;height:15vw" src="../assets/upload/<?php echo $service['imgUrl']?>" alt="Loading">
             <div class="card-body">
                 <div class="card-title">
                     <p class="text-center"><?php echo $service['name']?></p>
@@ -63,11 +61,9 @@
             </div>
             </div>
         </div>   
-    <?php  } ?>
+    <?php  }  ?>
 </div>
 </div>
-</body>
-</html>
 
 
 
